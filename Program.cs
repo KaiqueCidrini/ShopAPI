@@ -2,8 +2,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Shop;
 using Shoppin.Data;
+using Shoppin;
 
 var builder = WebApplication.CreateBuilder(args);
 
