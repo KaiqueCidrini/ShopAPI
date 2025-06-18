@@ -1,0 +1,6 @@
+@Shoppin_HostAddress = http://localhost:5211
+
+GET {{Shoppin_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
