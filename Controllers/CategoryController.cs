@@ -29,7 +29,7 @@ public class CategoryController : Controller
         return Ok(categories);
     }
 
-    [HttpPut]
+    [HttpPost]
     [Route("")]
     public async Task<ActionResult<Category>> Post(
         [FromBody] Category model,
