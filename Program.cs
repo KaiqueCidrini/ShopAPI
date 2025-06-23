@@ -36,8 +36,8 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
-builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("BancoLocal"));
-    //opt.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+builder.Services.AddDbContext<DataContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 
 builder.Services.AddSwaggerGen(c =>
 {
