@@ -162,3 +162,5 @@ C:\Projetos\Shoppin\obj\Debug\net9.0\refint\Shoppin.dll
 C:\Projetos\Shoppin\obj\Debug\net9.0\Shoppin.pdb
 C:\Projetos\Shoppin\obj\Debug\net9.0\Shoppin.genruntimeconfig.cache
 C:\Projetos\Shoppin\obj\Debug\net9.0\ref\Shoppin.dll
+C:\Projetos\Shoppin\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Projetos\Shoppin\obj\Debug\net9.0\Shoppin.sourcelink.json
