@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore.InMemory;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 // Configuração de serviços (equivalente ao ConfigureServices do Startup.cs)
@@ -71,3 +70,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
