@@ -7,9 +7,12 @@ using Shoppin;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore.InMemory;
+using Shoppin.AuthInterface;
+using Shoppin.AuthService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
+builder.Services.AddScoped<IAuthService, AuthService>();
 // Configuração de serviços (equivalente ao ConfigureServices do Startup.cs)
 builder.Services.AddResponseCompression(options =>
 {
@@ -68,6 +71,7 @@ app.UseAuthorization();
 
 // Configuração de endpoints
 app.MapControllers();
+
 
 app.Run();
 

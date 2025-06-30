@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Shoppin.AuthInterface;
 using Shoppin.Data;
 using Shoppin.Models;
 using Shoppin.Service;
@@ -11,12 +12,21 @@ namespace Shoppin.Controllers
     [Route("users")]
     public class UserController : ControllerBase
     {
+        private readonly DataContext _context;
+        private readonly IAuthService _authService;
+        public UserController(DataContext context, IAuthService authService)
+        {
+            _context = context;
+            _authService = authService;
+        }
+
+
         [HttpGet]
         [Route("")]
         [Authorize(Roles = "manager")]
-        public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
+        public async Task<ActionResult<List<User>>> Get()
         {
-            var users = await context.Users.AsNoTracking().ToListAsync();
+            var users = await _context.Users.AsNoTracking().ToListAsync();
             return users;
         }
 
@@ -24,7 +34,7 @@ namespace Shoppin.Controllers
         [Route("")]
         [AllowAnonymous]
         //[Authorize(Roles = "manager")]
-        public async Task<ActionResult<User>> Post([FromServices] DataContext context, [FromBody] User model)
+        public async Task<ActionResult<User>> Post([FromBody] User model)
         {
             if (!ModelState.IsValid)
             {
@@ -35,8 +45,8 @@ namespace Shoppin.Controllers
                 //Força usuário ser sempre funcionario
                 model.Role = "Funcionario";
 
-                context.Users.Add(model);
-                await context.SaveChangesAsync();
+                _context.Users.Add(model);
+                await _context.SaveChangesAsync();
                 model.Password = "";
                 return model;
             }
@@ -49,7 +59,7 @@ namespace Shoppin.Controllers
         [HttpPut]
         [Route("{id:int}")]
         [Authorize(Roles = "manager")]
-        public async Task<ActionResult<User>> Put([FromServices] DataContext context, int id, [FromBody] User model)
+        public async Task<ActionResult<User>> Put(int id, [FromBody] User model)
         {
             if (!ModelState.IsValid)
             {
@@ -61,8 +71,8 @@ namespace Shoppin.Controllers
             }
             try
             {
-                context.Entry(model).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                _context.Entry(model).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 return model;
                 
             }
@@ -74,20 +84,10 @@ namespace Shoppin.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<dynamic>> Authenticate([FromServices]DataContext context, [FromBody]User model)
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] User user)
         {
-            var user = await context.Users.AsNoTracking().Where(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefaultAsync();
-
-            if (user == null)
-                return NotFound(new { message = "Usuário ou senha inválidos." });
-            
-            var token = TokenService.GenerateToken(user);
-            user.Password = "";
-            return new
-            {
-                user = user,
-                token = token
-            };
+            var result = await _authService.AuthenticateAsync(user.Username, user.Password);
+            return Ok(result);
         }
 
     }
